@@ -1,0 +1,16 @@
+apiVersion: eks.services.k8s.aws/v1alpha1
+kind: PodIdentityAssociation
+metadata:
+  labels:
+    app: argo-ack-eks-{{ .Values.app }}
+  name: argo-ack-eks-{{ .Values.app }}
+  annotations:
+    helm.sh/hook-weight: "-50"
+    helm.sh/hook-delete-policy: hook-succeeded
+spec:
+  clusterName: {{ .Values.clusterName }}
+  roleARN: {{ .Values.roleArn }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  serviceAccount: argo-ack-eks-{{ .Values.app }}
+  tags:
+    aws-managed-by: github.com/aws-samples/sample-argocd-ack-eks

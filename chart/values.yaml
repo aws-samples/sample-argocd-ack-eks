@@ -1,0 +1,12 @@
+# Name of the application to be deployed
+app: static
+# Cluster name where to deploy this application (used in ArgoCD)
+clusterName: default
+# Namespace where the ServiceAccount will be deployed, this is used for the EKS Pod Identity Association only, default to Release.Namespace
+namespace: null
+# Rolearn to be linked to our service account using EKS Pod Identity
+roleArn: dummy
+# Option to enable the job validating AWS Credentials are injected
+jobWorkaround: disabled
+# Default image being used.
+image: public.ecr.aws/aws-cli/aws-cli:2.25.13 # This could be used as any small image already present with sh shell

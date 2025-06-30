@@ -1,0 +1,15 @@
+apiVersion: v2
+name: sample-argocd-ack-eks
+description: A sample Helm chart, showcasing how to testing EKS Pod Identity Association are available through AWS Controllers for Kubernetes (ACK) and Argo CD with on Amazon EKS
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+kubeVersion: ">=1.24.0-0"
+keywords:
+  - argocd
+  - ack
+  - eks
+  - gitops
+  - kubernetes
+  - aws
+  - controllers

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: argo-ack-eks-{{ .Values.app }}
+  name: argo-ack-eks-{{ .Values.app }}
+  annotations:
+    helm.sh/hook-weight: "100"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argo-ack-eks-{{ .Values.app }}
+  template:
+    metadata:
+      labels:
+        app: argo-ack-eks-{{ .Values.app }}
+    spec:
+      containers:
+        - name: argo-ack-eks
+          image: {{ .Values.image }}
+          command: ["sleep"]
+          args: ["86400"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+      serviceAccountName: argo-ack-eks-{{ .Values.app }}

@@ -1,0 +1,27 @@
+{{- if eq .Values.jobWorkaround "enabled" }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app: argo-ack-eks-{{ .Values.app }}
+  name: argo-ack-eks-{{ .Values.app }}
+  annotations:
+    helm.sh/hook-weight: "50"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      serviceAccountName: argo-ack-eks-{{ .Values.app }}
+      automountServiceAccountToken: false
+      restartPolicy: Never
+      containers:
+        - name: argo-ack-eks
+          image: {{ .Values.image }} # This could be used as any small image already present with sh shell
+          command:
+            - sh
+            - "-c"
+            - "env | grep AWS_CONTAINER ; if [ $? -ne 0 ]; then echo 'No env set'; exit 1; else echo 'Found'; env; fi"
+  backoffLimit: 4
+  activeDeadlineSeconds: 60
+{{- end }}

@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-ack-eks
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/aws-samples/sample-argocd-ack-eks.git
+    path: chart
+    targetRevision: main
+    helm:
+      parameters:
+        - name: "roleArn"
+          value: "arn:aws:iam::123456789012:role/sample-app-role"
+        - name: "clusterName"
+          value: "getting-started-gitops"
+        - name: "jobWorkaround"
+          value: "enabled"
+  destination:
+    namespace: sample-argocd-ack-eks
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
