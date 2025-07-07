@@ -14,7 +14,7 @@ spec:
     helm:
       parameters:
         - name: "roleArn"
-          value: "arn:aws:iam::123456789012:role/sample-app-role"
+          value: "arn:aws:iam::123456789012:role/sample-argocd-ack-eks-role"
         - name: "clusterName"
           value: "getting-started-gitops"
         - name: "jobWorkaround"
