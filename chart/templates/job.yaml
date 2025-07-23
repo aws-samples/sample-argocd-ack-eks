@@ -17,11 +17,15 @@ spec:
       restartPolicy: Never
       containers:
         - name: argo-ack-eks
-          image: {{ .Values.image }} # This could be used as any small image already present with sh shell
+          image: {{ .Values.image }} # We need the aws-cli
+          env:
+          - name: EXPECTED_ASSUMED_ROLE_ARN
+            value: {{ regexReplaceAll ":role/" .Values.roleArn ":assumed-role/" }}
           command:
             - sh
             - "-c"
             - "env | grep AWS_CONTAINER ; if [ $? -ne 0 ]; then echo 'No env set'; exit 1; else echo 'Found'; env; fi"
+            - aws sts get-caller-identity --output text --query "Arn" | grep -qi "$EXPECTED_ASSUMED_ROLE_ARN"; then echo "Found"; else exit 1; fi
   backoffLimit: 4
   activeDeadlineSeconds: 60
 {{- end }}
